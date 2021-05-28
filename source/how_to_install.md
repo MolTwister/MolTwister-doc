@@ -109,7 +109,9 @@ On MacOS, it is important to goto Projects > Buid & Run > Run, from the left han
 
 ## Installation of MolTwister
 
-Goto the build output folder that was created for MolTwister after calling ````make```` (or build in QtCreator). Then execute
+If MolTwister was compiled from the command line, make sure the working folder is the folder containing the source code (same folder as pulled from Git and 
+the same folder from where ````make```` was called). In case QtCreater was used to build MolTwister, goto the build output folder created by QtCreator.
+Usually, the output folder is created one level below the source folder. However, this is configurable through the QtCreator user interface. Then execute
 ````text
 sudo make install
 ````
