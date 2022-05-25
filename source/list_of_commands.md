@@ -192,11 +192,11 @@ Make several copies of atoms, or collection of atoms. The allowed specifiers are
 ````text
 Overview of commands of the form 'add <sub command>':
 
-add atom <ID> at <x> <y> <z> [cubecpy <nx> <ny> <nz> <dx> <dy> <dz>, spherecpy <N> <R> [random]]
-add atom <ID> from atom <n> dist <d> [cubecpy...]
-add atom <ID> from atom <n> dir <dx> <dy> <dz> dist <d> [cubecpy...]
-add atom <ID> from bond <n1> <n2> angle <angle> <dih> dist <d> [cubecpy...]
-add atom <ID> from angle <n1> <n2> <n3> angle <angle> <dih> dist <d> [cubecpy...]
+add atom <ID> [atomlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] at <x> <y> <z> [cubecpy <nx> <ny> <nz> <dx> <dy> <dz>, spherecpy <N> <R> [random]]
+add atom <ID> [atomlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] from atom <n> [bondlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] dist <d> [cubecpy...]
+add atom <ID> [atomlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] from atom <n> [bondlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] dir <dx> <dy> <dz> dist <d> [cubecpy...]
+add atom <ID> [atomlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] from bond <n1> <n2> [bondlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] angle <angle> <dih> dist <d> [cubecpy...]
+add atom <ID> [atomlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] from angle <n1> <n2> <n3> [bondlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] angle <angle> <dih> dist <d> [cubecpy...]
 add atoms <ID> sel <dx> <dy> <dz>
 add mdnonbonded <ID1> <ID2> <FF-type> <parameters for given FF-type>
 add mdbond <ID1> <ID2> <FF-type> [all_r_less_than <radius>, mol_r_less_than <radius>, only_visible_bonds, only_14_bonds] <parameters for given FF-type>
@@ -212,16 +212,21 @@ To get more information about a <sub command>, type 'help add <sub command>
 ````text
 Overview of commands of the form 'add atom':
 
-add atom <ID> at <x> <y> <z> [cubecpy <nx> <ny> <nz> <dx> <dy> <dz>, spherecpy <N> <R> [random]]
-add atom <ID> from atom <n> dist <d> [cubecpy...]
-add atom <ID> from atom <n> dir <dx> <dy> <dz> dist <d> [cubecpy...]
-add atom <ID> from bond <n1> <n2> angle <angle> <dih> dist <d> [cubecpy...]
-add atom <ID> from angle <n1> <n2> <n3> angle <angle> <dih> dist <d> [cubecpy...]
+add atom <ID> [atomlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] at <x> <y> <z> [cubecpy <nx> <ny> <nz> <dx> <dy> <dz>, spherecpy <N> <R> [random]]
+add atom <ID> [atomlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] from atom <n> [bondlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] dist <d> [cubecpy...]
+add atom <ID> [atomlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] from atom <n> [bondlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] dir <dx> <dy> <dz> dist <d> [cubecpy...]
+add atom <ID> [atomlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] from bond <n1> <n2> [bondlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] angle <angle> <dih> dist <d> [cubecpy...]
+add atom <ID> [atomlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] from angle <n1> <n2> <n3> [bondlabel <name> <x-displ> <y-displ> <z-displ> <r>, <g>, <b>] angle <angle> <dih> dist <d> [cubecpy...]
 
 In general, ID could for example be C, H, or O (i.e. carbon, hydrogen, or
 oxygen). It is also possible to give names such as C1 or C2. As long as
 the name contains a C it is recognized as a carbon atom. Similarly, any
 name containing O will be recognized as oxygen, etc.
+
+The 'atomlabel' keyword can be used to add a label with any <name>, without white
+characters, that can be displayed a displacement (<x-disp>, <y-disp>, <z-displ>) away
+from the atomic position, with the color {<r>, <g>, <b>}. Similarly, a label can be
+added relative to each bond center by applying the 'bondlabel' keyword.
 
 When atoms are added they attain a new index starting at index 0. The list
 of atomic indices are obtained through the 'list' command.
@@ -704,6 +709,12 @@ Usage: set projection <projection>
        set bondacrosspbc <bondacrosspbc>
        set redrawlimit <num atoms>
        set fog <fog>
+       set usevdwradius <usevdwradius>
+       set vdwscalefactor <vdwscalefactor>
+       set labels <labels>
+       set labelsfontsize <fontsize>
+       set backgroundcolor <r> <g> <b>
+       set backgroundcolor default
 
 This command will set various properties of MolTwister or its loaded systems.
 
@@ -723,6 +734,16 @@ of the scene, scenes with more than <num atoms> atoms will only be displayed wit
 axis system. All atoms will be redrawn once the corresponding mouse button is released.
 
 The <fog> can be either 'on' or 'off'.
+
+The <usevdwradius> can be either 'on' or 'off'. If 'on' the atoms are drawn using the
+built in van der Waals radius multiplied by <vdwscalefactor> (default 1).
+
+The <labels> can be either 'on' or 'off'. If 'on', the atom and bond labels defined in the
+'add atom' command will be displayed.
+
+The <fontsize> can be either 10, 12 or 18.
+
+The color values <r> <g> <b> (red, green and blue) must be between 0 and 1.
 ````
 
 ## get
@@ -848,6 +869,7 @@ measure count tot
 measure dihedral <dihedral>
 measure overlap <within> sel
 measure pbc [<frame index>]
+measure radiusofgyration sel
 
 To get more information about a <sub command>, type 'help measure <sub command>
 
@@ -1129,8 +1151,8 @@ measure overlap <within> sel
 
 Counts number of overlaping atoms within the current frame by counting the
 number of atoms that are closer than the distance <within>. The count is
-limited to the currently selected atoms, which is specified by the 'sel'
-keyword.
+done for all atoms. Specifying the 'sel' keyword will select one atom of
+every overlapping pair of atoms.
 
 Output:
 1. Total number of overlaps within <within> = N
@@ -1164,6 +1186,24 @@ Output:
 3. x = [<z low>, <z high>]
 If the PBC is user defined, this will be notified by the message 'User
 defined PBC!', in addition to the above.
+
+````
+
+### radiusofgyration
+
+````text
+Overview of commands of the form 'measure radiusofgyration':
+
+measure radiusofgyration sel
+
+Measures the radius of gyration for the collection of atoms defined by
+* the visual selection of atoms, by using the 'sel' keyword
+If 'sel' is not specified, 'sel' is assumed.
+
+Note that atomic masses must be loaded for this command to work!
+
+Output:
+Rgyr = <radius of gyration>
 
 ````
 
