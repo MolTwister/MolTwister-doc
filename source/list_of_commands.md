@@ -1246,7 +1246,7 @@ calculate hbondcount <DCD filename> <frame from> <frame to> stride <stride> <M> 
 calculate hbondcount <DCD filename> <frame from> <frame to> <M> <h-bond crit 1> ... <h-bond crit M> [pbcfromvisual] [searchtype <type>] [nopbc]
 calculate loading <DCD filename> <frame from> <frame to> <atom IDs to find loading for> <lower vector - loading region> <upper vector - loading region>
 calculate msd <DCD filename> <frame from> <frame to> resname <resname> [usegeomcent] [numshiftsint0 <num shifts>]
-calculate paircorrelation <DCD filename> <frame from> <frame to> <atom ID 1> <atom ID 2> <num bins> <min. dist> <max. dist>
+calculate paircorrelation <DCD filename> <frame from> <frame to> <atom ID 1> <atom ID 2> <num bins> <min. dist> <max. dist> [ignorepbc] [ignoredistbelow <dist>]
 calculate potenergymap <DCD filename> <frame from> <frame to> <atom IDs> <list of applied force fields> <Nx> <Ny> <cutting plane> <cutting plane pos>
 calculate qbal <group of atoms to modify>
 calculate vacf <DCD filenmae> <frame from> <frame to> <time step (fs)> <VACF length> name <atom IDs (comma sep., no space)>
@@ -1861,25 +1861,33 @@ where N is the number of points in the MSD curve.
 ````text
 Overview of commands of the form 'calculate paircorrelation':
 
-calculate paircorrelation <DCD filename> <frame from> <frame to> <atom ID 1> <atom ID 2> <num bins> <min. dist> <max. dist>
+calculate paircorrelation <DCD filename> <frame from> <frame to> <atom ID 1> <atom ID 2> <num bins> <min. dist> <max. dist> [ignorepbc] [ignoredistbelow <dist>]
 
 Calculates the pair correlation function, averaged over frames <frame from> to <frame to>,
 taken from the DCD file <DCD filename>. Pair correlation is calculated between atoms with
 ID <atom ID 1> and <atom ID 2> (e.g., H, O, C7). The pair correlation function is calculated
-for distances between <min. dist> and <max. dist>, divided into <num bins>.
+for distances between <min. dist> and <max. dist>, divided into <num bins>. By default periodic
+boundary conditions (PBCs) are used, thus letting the distance measurements go across these
+boundaries. To prevent distance measurements across PBCs, use the 'ignorepbc' keyword. If it
+is desirable to only include distances above a distance criteria, <dist>, in the pair correlation
+function, the 'ignoredistbelow' keyword can be applied.
 
 Ouptut:
 1. From frame: <frame from>
 2. To frame: <frame to>
-3. Range: [<min. dist>, <max. dist>]
-4. Num. bins: <num bins>
-5. Distance Count PairCorr RDF IdGas.RDF
-6. <distance> <num. atoms in bin> <pair correlation value> <radial distribution function (RDF) value> <ideal gas RDF value>
-7. <distance> <num. atoms in bin> <pair correlation value> <radial distribution function (RDF) value> <ideal gas RDF value>
+3. Pair: <atom ID1>-<atom ID2>
+4. Range: [<min. dist>, <max. dist>]
+5. Num. bins: <num bins>
+6. Ignore dist. below: <dist>
+7. Use PBC: yes/no
+8.
+9. Distance Count PairCorr RDF IdGas.RDF
+10. <distance> <num. atoms in bin> <pair correlation value> <radial distribution function (RDF) value> <ideal gas RDF value>
+11. <distance> <num. atoms in bin> <pair correlation value> <radial distribution function (RDF) value> <ideal gas RDF value>
         .
         .
         .
-N+5. <distance> <num. atoms in bin> <pair correlation value> <radial distribution function (RDF) value> <ideal gas RDF value>
+N+9. <distance> <num. atoms in bin> <pair correlation value> <radial distribution function (RDF) value> <ideal gas RDF value>
 where N is the number of applied bins.
 
 ````
