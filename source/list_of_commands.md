@@ -1251,8 +1251,8 @@ calculate potenergymap <DCD filename> <frame from> <frame to> <atom IDs> <list o
 calculate qbal <group of atoms to modify>
 calculate vacf <DCD filenmae> <frame from> <frame to> <time step (fs)> <VACF length> name <atom IDs (comma sep., no space)>
 calculate vacf <DCD filenmae> <frame from> <frame to> <time step (fs)> <VACF length> sel
-calculate vdos <DCD filename> <frame from> <num. bits> <time step (fs)> name <atom IDs (comma sep., no space)>
-calculate vdos <DCD filename> <frame from> <num. bits> <time step (fs)> sel
+calculate vdos <DCD filename> <frame from> <num. bits> <time step (fs)> [com] name <atom IDs (comma sep., no space)>
+calculate vdos <DCD filename> <frame from> <num. bits> <time step (fs)> [com] sel
 calculate volumefromdensity <target density in kg/m^3> <atomic masses in g/mol> <num. molecules>
 
 To get more information about a <sub command>, type 'help calculate <sub command>
@@ -1990,8 +1990,8 @@ where N is the number of points selected in the VACF (<VACF length>).
 ````text
 Overview of commands of the form 'calculate vdos':
 
-calculate vdos <DCD filename> <frame from> <num. bits> <time step (fs)> name <atom IDs (comma sep., no space)>
-calculate vdos <DCD filename> <frame from> <num. bits> <time step (fs)> sel
+calculate vdos <DCD filename> <frame from> <num. bits> <time step (fs)> [com] name <atom IDs (comma sep., no space)>
+calculate vdos <DCD filename> <frame from> <num. bits> <time step (fs)> [com] sel
 
 Calculates the vibrational density of states (VDOS) for the DCD file, <DCD filename>,
 between the start frame, <frame from>, to the frame <frame from>+2^<num. bits>. The time
@@ -1999,16 +1999,17 @@ step, <time step>, given in units of femtoseconds (fs), is used to obtain numeri
 calculated velocities that are needed within the calculations. VDOS is only calculated for a
 given selection of atoms. Either, based on the atom 'name', where a list, <atom IDs>,
 is supplied (e.g., H, O, C7), or based on the visual selection of atoms, achieved through
-the 'sel' keyword.
+the 'sel' keyword. If the 'com' keyword is selected, the velocity of the center of mass of
+the selected atoms is calculated, otherwise the average velocity of the selected atoms is used.
 
 Output:
-1. omegaomega[rad/fs] vdos
-2. <angular frequency> <VDOS value (probability)>
-3. <angular frequency> <VDOS value (probability)>
+1. omega[rad/fs] vdos_o freq[x10^15Haz] vdos_f lambda[nm] vdos_l k[cm^-1] vdos_k
+2. <angular frequency> <VDOS value> <frequency> <VDOS value> <wavelength> <VDOS value> <wavenumber> <VDOS value>
+3. <angular frequency> <VDOS value> <frequency> <VDOS value> <wavelength> <VDOS value> <wavenumber> <VDOS value>
        .
        .
        .
-N+1. <angular frequency> <VDOS value (probability)>
+N+1. <angular frequency> <VDOS value> <frequency> <VDOS value> <wavelength> <VDOS value> <wavenumber> <VDOS value>
 where N is the length of the VDOS function.
 
 ````
@@ -2343,6 +2344,18 @@ MolTwister. These are as follows
 
 	mt_is_atom_sel(atomIndex:integer) : result as boolean
 	Returns true if the atom at the given atom index is selected, else it returns false.
+
+	mt_create_xyz_file(filePath:string) : no result
+	Create an empty XYZ file.
+
+	mt_append_to_xyz_file(filePath:string, boxSizeX:float, boxSizeY:float, boxSizeZ:float, convertToAU:bool, atomCoordinates:list) : no result
+	Append list of [atomTypeString, x, y, z]-lists to XYZ file.
+
+	mt_create_dcd_file(filePath:string, numTimeSteps:int, stride:int, timeStep:float, numAtoms:int) : no result
+	Create a DCD file with given header information.
+
+	mt_append_to_dcd_file(filePath:string, boxSizeX:float, boxSizeY:float, boxSizeZ:float, atomCoordinates:list) : no result
+	Append list of [x, y, z]-lists to DCD file.
 
 	mt_begin_progress(progBarDescription:string) : no result
 	Shows initial progress bar (in the command line shell) with given text.
