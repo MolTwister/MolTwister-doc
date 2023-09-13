@@ -1,8 +1,8 @@
 # How to cite MolTwister
 
-For the time being, MolTwister can be cited using the following web address
-````
-http://www.moltwister.com
+MolTwister can be cited using the following article:
+````text
+Olsen, R. (2023), Comp. Phys. Commun., 291, pp. 108822. doi: 10.1016/j.cpc.2023.108822.
 ````
 If using the charge balancing algorithm, which is invoked by a call to the ````calculate qbal```` command, it is possible to cite the paper where this procedure is introduced:
 ````text
